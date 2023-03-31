@@ -129,6 +129,8 @@ public class CarSelectionActivity extends BaseInjectorActivity implements Corout
 
     @Inject
     protected UserPreferenceHandler userHandler;
+    private String current_vehicle = null;
+
 
 
     @Override
@@ -389,6 +391,7 @@ public class CarSelectionActivity extends BaseInjectorActivity implements Corout
 
         CarSelectionMetadata carSelectionMetadata = new CarSelectionMetadata(
                 deserializedCars,
+                current_vehicle,
                 true
         );
         if (metadataHandler.getMetadata() != null) {
@@ -404,6 +407,7 @@ public class CarSelectionActivity extends BaseInjectorActivity implements Corout
             String carNameFromList = String.format("%s - %s", usedCars.get(i).getManufacturer(), usedCars.get(i).getModel());
             if (carNameFromList.equals(carName)) {
                 int index = i;
+                this.current_vehicle = carName;
                 runOnUiThread(() -> {
                     View view = mCarListView.getAdapter().getView(index, null, mCarListView);
                     CarSelectionListAdapter.CarViewHolder holder = new CarSelectionListAdapter.CarViewHolder(view);
@@ -414,6 +418,7 @@ public class CarSelectionActivity extends BaseInjectorActivity implements Corout
             }
         }
     }
+
 
     /**
      * Creates and shows a snackbar

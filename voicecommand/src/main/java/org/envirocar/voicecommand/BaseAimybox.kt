@@ -25,6 +25,7 @@ import com.example.voicecommand.R
 import com.justai.aimybox.Aimybox
 import com.justai.aimybox.components.AimyboxAssistantViewModel
 import com.justai.aimybox.components.AimyboxProvider
+import com.justai.aimybox.components.L
 import com.justai.aimybox.core.Config.Companion.create
 import com.justai.aimybox.speechkit.google.platform.GooglePlatformSpeechToText
 import com.justai.aimybox.speechkit.google.platform.GooglePlatformTextToSpeech
@@ -32,10 +33,12 @@ import com.justai.aimybox.speechkit.pocketsphinx.PocketsphinxAssets
 import com.justai.aimybox.speechkit.pocketsphinx.PocketsphinxRecognizerProvider
 import com.justai.aimybox.speechkit.pocketsphinx.PocketsphinxVoiceTrigger
 import com.squareup.otto.Bus
+import okhttp3.internal.concurrent.TaskRunner.Companion.logger
 import org.envirocar.voicecommand.customskills.EnviroCarRasaCustomSkill
 import org.envirocar.voicecommand.dialogapi.rasa.CustomRasaDialogApi
 import org.envirocar.voicecommand.handler.MetadataHandler
 import java.util.*
+
 
 
 /**
@@ -59,6 +62,7 @@ class BaseAimybox (
         mBus: Bus,
         metadataHandler: MetadataHandler
     ): Aimybox {
+
 
         // Accessing model from assets folder
         val assets = PocketsphinxAssets
@@ -92,10 +96,11 @@ class BaseAimybox (
     }
 
     companion object {
+        private var currentAimybox: Aimybox? = null;
         private const val ARGUMENTS_KEY = "arguments"
         private val sender = UUID.randomUUID().toString()
         private const val WEBHOOK_URL =
-            "https://rasa-server-cdhiraj40.cloud.okteto.net/webhooks/envirocar/webhook"
+            "http://ayushdube.me/webhooks/envirocar/webhook"
 
         fun setInitialPhrase(
             context: Context,
@@ -107,6 +112,14 @@ class BaseAimybox (
 
             viewModel.setInitialPhrase(initialPhrase)
 
+        }
+
+        fun setCurrentAimybox(aimybox: Aimybox) {
+            currentAimybox = aimybox;
+        }
+
+        fun getCurrentAimybox() : Aimybox? {
+            return currentAimybox;
         }
 
         fun findAimyboxProvider(activity: Activity): AimyboxProvider? {

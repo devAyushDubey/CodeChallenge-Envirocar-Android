@@ -43,5 +43,6 @@ data class RecordingMetadata(
 
 data class CarSelectionMetadata(
     val cars: List<String>,
+    val car_name: String?,
     var is_car_selection_fragment: Boolean,
 )

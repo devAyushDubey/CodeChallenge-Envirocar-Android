@@ -22,11 +22,13 @@ import com.google.gson.JsonObject
 import com.justai.aimybox.Aimybox
 import com.squareup.otto.Bus
 import org.envirocar.voicecommand.enums.CarSelection
+import org.envirocar.voicecommand.enums.CarAddition
 import org.envirocar.voicecommand.enums.NavigationScreens
 import org.envirocar.voicecommand.enums.Recording
 import org.envirocar.voicecommand.enums.RecordingRequirements
 import org.envirocar.voicecommand.events.VoiceCommandEventType
 import org.envirocar.voicecommand.events.carselection.CarSelectionEvent
+import org.envirocar.voicecommand.events.caraddition.CarAdditionEvent
 import org.envirocar.voicecommand.events.navigation.NavigationEvent
 import org.envirocar.voicecommand.events.recording.RecordingRequirementEvent
 import org.envirocar.voicecommand.events.recording.RecordingTrackEvent
@@ -55,6 +57,9 @@ class EnviroCarIntention {
                 }
                 VoiceCommandEventType.CarSelection.name -> {
                     postCarSelectionEvent(bus, aimybox, action, data, nextAction)
+                }
+                VoiceCommandEventType.CarAddition.name -> {
+                    postCarAdditionEvent(bus, aimybox, action, data, nextAction)
                 }
                 VoiceCommandEventType.NavigationScreens.name -> {
                     postNavigationEvent(bus, aimybox, action, nextAction)
@@ -151,6 +156,57 @@ class EnviroCarIntention {
                         CarSelectionEvent(
                             aimybox,
                             CarSelection.DELETE,
+                            nextAction = nextAction
+                        )
+                    )
+                }
+            }
+        }
+
+        private fun postCarAdditionEvent(
+            bus: Bus,
+            aimybox: Aimybox,
+            action: String,
+            data: JsonObject?,
+            nextAction: Aimybox.NextAction
+        ) {
+            val manufacturerId = data?.get("car_manufacturer_id")?.asString.toString()
+            val manufacturerName = data?.get("car_manufacturer_name")?.asString.toString()
+            when (action) {
+                CarAddition.SELECT.name -> {
+                    bus.post(
+                        CarAdditionEvent(
+                            aimybox,
+                            CarAddition.SELECT,
+                            manufacturerId,
+                            manufacturerName,
+                            nextAction
+                        )
+                    )
+                }
+                CarAddition.DESELECT.name -> {
+                    bus.post(
+                        CarAdditionEvent(
+                            aimybox,
+                            CarAddition.DESELECT,
+                            nextAction = nextAction
+                        )
+                    )
+                }
+                CarAddition.DELETE.name -> {
+                    bus.post(
+                        CarAdditionEvent(
+                            aimybox,
+                            CarAddition.DELETE,
+                            nextAction = nextAction
+                        )
+                    )
+                }
+                CarAddition.ADD.name -> {
+                    bus.post(
+                        CarAdditionEvent(
+                            aimybox,
+                            CarAddition.ADD,
                             nextAction = nextAction
                         )
                     )

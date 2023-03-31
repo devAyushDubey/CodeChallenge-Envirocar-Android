@@ -222,6 +222,7 @@ public class CarSelectionAddCarFragment extends BaseInjectorFragment {
             attributesFragment = new CarSelectionAttributesFragment(manufacturersList);
         }
 
+
         @NonNull
         @Override
         public Fragment getItem(int position) {

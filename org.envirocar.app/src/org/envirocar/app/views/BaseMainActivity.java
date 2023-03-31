@@ -282,6 +282,7 @@ public class BaseMainActivity extends BaseInjectorActivity {
         checkKeepScreenOn();
     }
 
+
     @Override
     protected void onDestroy() {
         LOGGER.info("BaseMainActivity : onDestroy()");

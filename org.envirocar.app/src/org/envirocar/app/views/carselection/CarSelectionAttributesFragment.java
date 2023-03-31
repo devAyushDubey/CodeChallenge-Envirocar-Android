@@ -39,6 +39,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.jakewharton.rxbinding3.widget.RxTextView;
+import com.squareup.otto.Subscribe;
 
 import org.envirocar.app.BaseApplicationComponent;
 import org.envirocar.app.R;
@@ -47,6 +48,7 @@ import org.envirocar.core.entity.Manufacturers;
 import org.envirocar.core.entity.Vehicles;
 import org.envirocar.core.logging.Logger;
 import org.envirocar.storage.EnviroCarVehicleDB;
+import org.envirocar.voicecommand.events.caraddition.CarAdditionEvent;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -545,5 +547,19 @@ public class CarSelectionAttributesFragment extends BaseInjectorFragment {
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Subscribe
+    public void onCarAdditionEvent(final CarAdditionEvent event) {
+        LOG.info(String.format("onStartEvent(): event=%s", event.getAction()));
+        String manufacturerId = event.getManufacturerId();
+        String manufacturerName = event.getManufacturerName();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                manufactureEditText.setText(manufacturerName,false);
+            }
+        });
+
     }
 }

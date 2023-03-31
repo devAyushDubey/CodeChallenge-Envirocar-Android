@@ -21,6 +21,7 @@ package org.envirocar.app.injection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.MenuItem;
 
 import com.squareup.otto.Bus;
@@ -58,7 +59,6 @@ public abstract class BaseInjectorActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
         // Unregister from the bus.
         mBus.unregister(this);
     }

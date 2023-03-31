@@ -256,6 +256,7 @@ public class DashboardFragment extends BaseInjectorFragment implements Coroutine
     private Boolean welcomeMessageShown = false;
 
     private AimyboxAssistantViewModel viewModel;
+    private String current_vehicle = null;
 
     @Override
     protected void injectDependencies(BaseApplicationComponent baseApplicationComponent) {
@@ -828,8 +829,9 @@ public class DashboardFragment extends BaseInjectorFragment implements Coroutine
         // post on decor view to ensure that it gets executed when view has been inflated.
         runAfterInflation(() -> {
             if (event.mCar != null) {
-                this.carSelectionTextPrimary.setText(String.format("%s %s",
-                        event.mCar.getManufacturer(), event.mCar.getModel()));
+                this.current_vehicle = String.format("%s %s", event.mCar.getManufacturer(), event.mCar.getModel());
+                this.carSelectionTextPrimary.setText(current_vehicle);
+
                 String secText = String.format("%s, %s cm³, %s",
                         "" + event.mCar.getConstructionYear(),
                         "" + event.mCar.getEngineDisplacement(),
@@ -842,6 +844,8 @@ public class DashboardFragment extends BaseInjectorFragment implements Coroutine
                 // set indicator color accordingly
                 this.carIndicator.setActivated(true);
             } else {
+
+                this.current_vehicle = null;
 
                 this.carSelectionTextPrimary.setText(String.format("%s", getResources().getString(R.string.dashboard_carselection_no_car_selected)));
                 this.carSelectionTextSecondary.setText(String.format("%s", getResources().getString(R.string.dashboard_carselection_no_car_selected_advise)));
@@ -1111,6 +1115,7 @@ public class DashboardFragment extends BaseInjectorFragment implements Coroutine
 
         CarSelectionMetadata carSelectionMetadata = new CarSelectionMetadata(
                 new ArrayList<>(),
+                current_vehicle,
                 false
         );
         RecordingMetadata recordingMetadata = new RecordingMetadata(

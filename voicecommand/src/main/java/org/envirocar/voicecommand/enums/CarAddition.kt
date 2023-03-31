@@ -16,18 +16,14 @@
  * You should have received a copy of the GNU General Public License along
  * with the enviroCar app. If not, see http://www.gnu.org/licenses/.
  */
-package org.envirocar.voicecommand.events
-
-import com.justai.aimybox.Aimybox
+package org.envirocar.voicecommand.enums
 
 /**
- * @author Dhiraj Chauhan
+ * @author Ayush Dubey
  */
-interface VoiceCommandEvent {
-    var aimybox: Aimybox
-    var nextAction: Aimybox.NextAction?
-}
-
-enum class VoiceCommandEventType {
-    Recording, RecordingRequirements, CarSelection, NavigationScreens, CarAddition
+enum class CarAddition {
+    SELECT,
+    DESELECT,
+    ADD,
+    DELETE
 }
